@@ -1,15 +1,7 @@
-const express = require('express')
-const morgan = require('morgan')
+const app = require('./app')
 const config = require('./utils/config')
-
-const app = express()
-
-app.use(morgan('tiny'))
-
-app.get('/', (req, res) => {
-  res.status(200).send('¡Backend en funcionamiento!')
-})
+const logger = require('./utils/logger')
 
 app.listen(config.PORT, () => {
-  console.log(`Server running on port ${config.PORT}`)
+  logger.info(`Server running on port ${config.PORT}`)
 })
