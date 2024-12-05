@@ -20,10 +20,11 @@
     "dotenv": "^16.4.7",
     "express": "4.21.1",
     "express-async-errors": "3.1.1",
+    "mongoose": "^8.8.3",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.7",
-    "prettier": "3.4.2"
+    "prettier": "3.4.2"    
   }
 }
