@@ -8,6 +8,7 @@ const mongoose = require('mongoose')
 const morgan = require('morgan')
 const blogRouter = require('./controllers/blogs')
 const { unknownEndpoint, errorHandler } = require('./utils/middleware')
+const userRouter = require('./controllers/users')
 
 mongoose.set('strictQuery', false)
 
@@ -35,6 +36,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/api/blogs', blogRouter)
+app.use('/api/users', userRouter)
 
 app.use(unknownEndpoint)
 app.use(errorHandler)
