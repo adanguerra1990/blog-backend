@@ -1,22 +1,29 @@
 const blogRouter = require('express').Router()
 const Blog = require('../models/blog')
+const { userExtractor } = require('../utils/middleware')
 
 blogRouter.get('/', async (request, response) => {
-  const blog = await Blog.find({})
+  const blog = await Blog.find({}).populate('user', { name: 1, username: 1 })
   response.json(blog)
 })
 
 blogRouter.get('/:id', async (request, response) => {
-  const blog = await Blog.findById(request.params.id)
-  if (blog) {
-    response.json(blog)
-  } else {
-    response.status(404).json({ error: 'Blog no encontrado' })
-  }
+  const blog = await Blog.findById(request.params.id).populate('user', {
+    name: 1,
+    username: 1,
+  })
+  blog
+    ? response.json(blog)
+    : response.status(404).json({ error: 'Blog no encontrado' })
 })
 
-blogRouter.post('/', async (request, response) => {
+blogRouter.post('/', userExtractor, async (request, response) => {
   const { title, author, url, likes } = request.body
+
+  const user = request.user
+  if (!user) {
+    return response(401).json({ error: 'Usuario no autenticado' })
+  }
 
   if (!title || !url || !author) {
     return response
@@ -29,9 +36,14 @@ blogRouter.post('/', async (request, response) => {
     author,
     url,
     likes: likes || 0,
+    user: user._id,
   })
 
   const saveBlog = await blog.save()
+
+  user.blog = user.blogs.concat(saveBlog._id)
+  await user.save()
+
   response.status(201).json(saveBlog)
 })
 
