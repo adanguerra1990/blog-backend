@@ -14,6 +14,7 @@ const {
 } = require('./utils/middleware')
 const userRouter = require('./controllers/users')
 const loginRouter = require('./controllers/login')
+const commentsRouter = require('./controllers/comments')
 
 mongoose.set('strictQuery', false)
 
@@ -43,6 +44,7 @@ app.get('/', (req, res) => {
 app.use(tokenExtractor)
 
 app.use('/api/blogs', blogRouter)
+app.use('/api/blogs', commentsRouter)
 app.use('/api/users', userRouter)
 app.use('/api/login', loginRouter)
 
