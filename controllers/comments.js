@@ -22,8 +22,6 @@ commentsRouter.post('/:id/comments', async (request, response) => {
     return response.status(404).json({ error: 'Blog no encontrado' })
   }
 
-  console.log('comentPost..', blog)
-
   const comment = new Comment({
     content,
     blog: blog._id,
@@ -32,8 +30,6 @@ commentsRouter.post('/:id/comments', async (request, response) => {
   const savedComment = await comment.save()
   blog.comments = blog.comments.concat(savedComment._id)
   await blog.save()
-
-  console.log('blog.comments..', blog.comments)
 
   response.status(201).json(savedComment)
 })
