@@ -3,15 +3,23 @@ const Blog = require('../models/blog')
 const { userExtractor } = require('../utils/middleware')
 
 blogRouter.get('/', async (request, response) => {
-  const blog = await Blog.find({}).populate('user', { name: 1, username: 1 })
+  const blog = await Blog.find({})
+    .populate('user', { name: 1, username: 1 })
+    .populate('comments', {
+      content: 1,
+    })
   response.json(blog)
 })
 
 blogRouter.get('/:id', async (request, response) => {
-  const blog = await Blog.findById(request.params.id).populate('user', {
-    name: 1,
-    username: 1,
-  })
+  const blog = await Blog.findById(request.params.id)
+    .populate('user', {
+      name: 1,
+      username: 1,
+    })
+    .populate('comments', {
+      content: 1,
+    })
   blog
     ? response.json(blog)
     : response.status(404).json({ error: 'Blog no encontrado' })
@@ -54,7 +62,11 @@ blogRouter.put('/:id', async (request, response) => {
     request.params.id,
     { title, author, url, likes },
     { new: true, runValidators: true, context: 'query' }
-  ).populate('user', { username: 1, name: 1 })
+  )
+    .populate('user', { username: 1, name: 1 })
+    .populate('comments', {
+      content: 1,
+    })
 
   if (updateBlog) {
     response.json(updateBlog)
