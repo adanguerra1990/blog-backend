@@ -2,7 +2,7 @@ const Comment = require('../models/comment')
 const Blog = require('../models/blog')
 const commentsRouter = require('express').Router()
 
-commentsRouter.get('/:id', async (request, response) => {
+commentsRouter.get('/:id/comments', async (request, response) => {
   const blog = await Blog.findById(request.params.id).populate('comments', {
     content: 1,
   })
