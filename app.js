@@ -33,8 +33,9 @@ mongoose
     logger.info('Error al conectar con MongoDB', error)
   })
 
-app.use(express.json())
 app.use(cors())
+app.use(express.static('dist'))
+app.use(express.json())
 app.use(morgan('tiny'))
 
 app.get('/', (req, res) => {
